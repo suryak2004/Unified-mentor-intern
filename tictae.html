@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Deluxe</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: rgba(236, 240, 241, 0.9);
+            --x-color: #e74c3c;
+            --o-color: #3498db;
+            --win-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1531685250784-7569952593d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            filter: blur(5px) brightness(0.7);
+            z-index: -1;
+        }
+
+        .start-menu, .difficulty-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 10;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .difficulty-menu {
+            display: none;
+        }
+
+        .menu-container {
+            background-color: var(--secondary);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .menu-options button {
+            padding: 12px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .menu-options button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .game-container {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            background-color: var(--secondary);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin: 0 auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .game-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+            background-color: rgba(255,255,255,0.7);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        #status {
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        #timer {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        #reset {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        #reset:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background-color: var(--primary);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background-color: var(--secondary);
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .cell:hover::before {
+            transform: translateX(100%);
+        }
+
+        .cell:hover {
+            transform: scale(0.97);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        .cell[data-mark="X"] {
+            color: var(--x-color);
+            animation: popIn 0.3s ease-out;
+        }
+
+        .cell[data-mark="O"] {
+            color: var(--o-color);
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .winning-cell {
+            background-color: rgba(46, 204, 113, 0.3);
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0 0 5px var(--win-color); }
+            to { box-shadow: 0 0 20px var(--win-color); }
+        }
+
+        @media (max-width: 500px) {
+            .cell {
+                font-size: 2.8rem;
+            }
+            
+            #status {
+                font-size: 1rem;
+            }
+            
+            #reset {
+                padding: 6px 12px;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    
+    <!-- Start Menu -->
+    <div class="start-menu" id="startMenu">
+        <div class="menu-container">
+            <h1>Tic-Tac-Toe Deluxe</h1>
+            <div class="menu-options">
+                <button id="pvc">1 vs Computer</button>
+                <button id="pvp">2 Players</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Difficulty Selection -->
+    <div class="difficulty-menu" id="difficultyMenu">
+        <div class="menu-container">
+            <h2>Select Difficulty</h2>
+            <div class="menu-options">
+                <button id="easy">Easy (10 sec)</button>
+                <button id="medium">Medium (30 sec)</button>
+                <button id="hard">Hard (1 min)</button>
+                <button id="back">Back</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Game Container -->
+    <div class="game-container" id="gameContainer">
+        <div class="container">
+            <h1>Tic-Tac-Toe Deluxe</h1>
+            <div class="game-info">
+                <p id="status">Player X's Turn</p>
+                <div id="timer">Time: 0:00</div>
+                <button id="reset">New Game</button>
+            </div>
+            <div class="board">
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+                <div class="cell" data-cell></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // UI Elements
+            const startMenu = document.getElementById('startMenu');
+            const difficultyMenu = document.getElementById('difficultyMenu');
+            const gameContainer = document.getElementById('gameContainer');
+            const pvcButton = document.getElementById('pvc');
+            const pvpButton = document.getElementById('pvp');
+            const easyButton = document.getElementById('easy');
+            const mediumButton = document.getElementById('medium');
+            const hardButton = document.getElementById('hard');
+            const backButton = document.getElementById('back');
+            
+            const board = document.querySelector('.board');
+            const cells = document.querySelectorAll('[data-cell]');
+            const status = document.getElementById('status');
+            const timerDisplay = document.getElementById('timer');
+            const resetButton = document.getElementById('reset');
+
+            // Game Variables
+            const X_CLASS = 'X';
+            const O_CLASS = 'O';
+            const WINNING_COMBINATIONS = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                [0, 4, 8], [2, 4, 6]             // diagonals
+            ];
+            
+            let currentPlayer = X_CLASS;
+            let gameActive = true;
+            let gameMode = '';
+            let difficulty = '';
+            let timeLimit = 0;
+            let timeLeft = 0;
+            let timerInterval = null;
+            let isComputerTurn = false;
+
+            // Initialize - Show start menu
+            startMenu.style.display = 'flex';
+            difficultyMenu.style.display = 'none';
+            gameContainer.style.display = 'none';
+
+            // Event Listeners for Menu
+            pvcButton.addEventListener('click', () => {
+                startMenu.style.display = 'none';
+                difficultyMenu.style.display = 'flex';
+            });
+            
+            pvpButton.addEventListener('click', () => {
+                startMenu.style.display = 'none';
+                gameMode = 'pvp';
+                startNewGame();
+                gameContainer.style.display = 'block';
+            });
+            
+            easyButton.addEventListener('click', () => {
+                difficulty = 'easy';
+                timeLimit = 10; // 10 seconds for easy
+                gameMode = 'pvc';
+                startNewGame();
+                difficultyMenu.style.display = 'none';
+                gameContainer.style.display = 'block';
+                startTimer();
+            });
+            
+            mediumButton.addEventListener('click', () => {
+                difficulty = 'medium';
+                timeLimit = 30; // 30 seconds for medium
+                gameMode = 'pvc';
+                startNewGame();
+                difficultyMenu.style.display = 'none';
+                gameContainer.style.display = 'block';
+                startTimer();
+            });
+            
+            hardButton.addEventListener('click', () => {
+                difficulty = 'hard';
+                timeLimit = 60; // 60 seconds (1 min) for hard
+                gameMode = 'pvc';
+                startNewGame();
+                difficultyMenu.style.display = 'none';
+                gameContainer.style.display = 'block';
+                startTimer();
+            });
+            
+            backButton.addEventListener('click', () => {
+                difficultyMenu.style.display = 'none';
+                startMenu.style.display = 'flex';
+            });
+            
+            resetButton.addEventListener('click', () => {
+                resetGame();
+            });
+
+            // Timer Functions
+            function startTimer() {
+                timeLeft = timeLimit;
+                updateTimerDisplay();
+                clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        endGameWithTimeout();
+                    }
+                }, 1000);
+            }
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 10) { // Turn red in last 10 seconds
+                    timerDisplay.style.color = 'red';
+                } else {
+                    timerDisplay.style.color = 'var(--primary)';
+                }
+            }
+
+            function endGameWithTimeout() {
+                gameActive = false;
+                alert(`Time's up! Game will restart.`);
+                resetGame();
+            }
+
+            // Game Functions
+            function startNewGame() {
+                cells.forEach(cell => {
+                    cell.textContent = '';
+                    cell.classList.remove('winning-cell');
+                    cell.removeAttribute('data-mark');
+                    cell.addEventListener('click', handleCellClick, { once: true });
+                });
+                
+                currentPlayer = X_CLASS; // Human is always X
+                gameActive = true;
+                isComputerTurn = false;
+                status.textContent = `Your Turn (X)`;
+            }
+
+            function handleCellClick(e) {
+                if (!gameActive || isComputerTurn) return;
+                
+                const cell = e.target;
+                placeMark(cell, currentPlayer);
+                
+                if (checkWin(currentPlayer)) {
+                    endGame(false);
+                } else if (isDraw()) {
+                    endGame(true);
+                } else {
+                    swapPlayer();
+                    if (gameMode === 'pvc') {
+                        isComputerTurn = true;
+                        status.textContent = "Computer Thinking...";
+                        // Immediate computer move (no delay)
+                        computerMove();
+                    }
+                }
+            }
+            
+            function placeMark(cell, player) {
+                cell.setAttribute('data-mark', player);
+                cell.textContent = player;
+            }
+            
+            function swapPlayer() {
+                currentPlayer = currentPlayer === X_CLASS ? O_CLASS : X_CLASS;
+                status.textContent = gameMode === 'pvc' && currentPlayer === O_CLASS 
+                    ? "Computer Thinking..." 
+                    : `Your Turn (X)`;
+            }
+            
+            function checkWin(player) {
+                return WINNING_COMBINATIONS.some(combination => {
+                    const isWinning = combination.every(index => {
+                        return cells[index].getAttribute('data-mark') === player;
+                    });
+                    
+                    if (isWinning) {
+                        combination.forEach(index => {
+                            cells[index].classList.add('winning-cell');
+                        });
+                    }
+                    
+                    return isWinning;
+                });
+            }
+            
+            function isDraw() {
+                return [...cells].every(cell => {
+                    return cell.hasAttribute('data-mark');
+                });
+            }
+            
+            function endGame(draw) {
+                gameActive = false;
+                clearInterval(timerInterval);
+                if (draw) {
+                    status.textContent = 'Game Ended in a Draw!';
+                    setTimeout(() => {
+                        alert("Game Ended in a Draw! Starting new game.");
+                        resetGame();
+                    }, 100);
+                } else {
+                    status.textContent = `Player ${currentPlayer} Wins!`;
+                    setTimeout(() => {
+                        alert(`Player ${currentPlayer} Wins! Starting new game.`);
+                        resetGame();
+                    }, 100);
+                }
+            }
+            
+            function resetGame() {
+                clearInterval(timerInterval);
+                gameContainer.style.display = 'none';
+                startMenu.style.display = 'flex';
+            }
+
+            // Computer AI Logic - All levels use optimal strategy
+            function computerMove() {
+                if (!gameActive || !isComputerTurn) return;
+                
+                let move;
+                const emptyCells = [...cells].filter(cell => !cell.hasAttribute('data-mark'));
+                
+                if (emptyCells.length === 0) return;
+                
+                // All difficulty levels use the same optimal strategy
+                move = findWinningMove(O_CLASS) ||  // Try to win
+                       findWinningMove(X_CLASS) ||  // Block player from winning
+                       centerOrCornerMove() ||      // Take center or corner
+                       getRandomMove();             // Fallback to random move
+                
+                if (move !== undefined) {
+                    placeMark(cells[move], O_CLASS);
+                    
+                    if (checkWin(O_CLASS)) {
+                        endGame(false);
+                    } else if (isDraw()) {
+                        endGame(true);
+                    } else {
+                        currentPlayer = X_CLASS;
+                        isComputerTurn = false;
+                        status.textContent = "Your Turn (X)";
+                    }
+                }
+            }
+            
+            function getRandomMove() {
+                const emptyCells = [...cells].filter(cell => !cell.hasAttribute('data-mark'));
+                if (emptyCells.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+                    return parseInt(emptyCells[randomIndex].getAttribute('data-cell'));
+                }
+                return undefined;
+            }
+            
+            function findWinningMove(player) {
+                for (const combination of WINNING_COMBINATIONS) {
+                    const [a, b, c] = combination;
+                    const cellsData = [
+                        cells[a].getAttribute('data-mark'),
+                        cells[b].getAttribute('data-mark'),
+                        cells[c].getAttribute('data-mark')
+                    ];
+                    
+                    if (cellsData.filter(mark => mark === player).length === 2 && 
+                        cellsData.includes(null)) {
+                        return combination[cellsData.indexOf(null)];
+                    }
+                }
+                return null;
+            }
+            
+            function centerOrCornerMove() {
+                if (!cells[4].hasAttribute('data-mark')) return 4;
+                
+                const corners = [0, 2, 6, 8];
+                const emptyCorners = corners.filter(index => !cells[index].hasAttribute('data-mark'));
+                if (emptyCorners.length > 0) {
+                    return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
+                }
+                
+                return getRandomMove();
+            }
+        });
+    </script>
+</body>
+</html>
