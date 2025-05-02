@@ -354,7 +354,7 @@
             
             easyButton.addEventListener('click', () => {
                 difficulty = 'easy';
-                timeLimit = 10; // 10 seconds for easy
+                timeLimit = 60; // 10 seconds for easy
                 gameMode = 'pvc';
                 startNewGame();
                 difficultyMenu.style.display = 'none';
@@ -364,7 +364,7 @@
             
             mediumButton.addEventListener('click', () => {
                 difficulty = 'medium';
-                timeLimit = 30; // 30 seconds for medium
+                timeLimit = 90; // 30 seconds for medium
                 gameMode = 'pvc';
                 startNewGame();
                 difficultyMenu.style.display = 'none';
@@ -374,7 +374,7 @@
             
             hardButton.addEventListener('click', () => {
                 difficulty = 'hard';
-                timeLimit = 60; // 60 seconds (1 min) for hard
+                timeLimit = 0; // 60 seconds (1 min) for hard
                 gameMode = 'pvc';
                 startNewGame();
                 difficultyMenu.style.display = 'none';
