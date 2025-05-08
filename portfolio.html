@@ -616,70 +616,70 @@
             background-color: white;
         }
         
-        .contact-container {
-            display: flex;
-            gap: 50px;
-        }
-        
-        .contact-info {
-            flex: 1;
-        }
-        
-        .contact-info h3 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        
-        .contact-info p {
-            color: var(--gray);
-            margin-bottom: 30px;
-        }
-        
-        .contact-details {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: rgba(37, 99, 235, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 20px;
-        }
-        
-        .contact-text h4 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        
-        .contact-text p, .contact-text a {
-            color: var(--gray);
-            font-size: 14px;
-        }
-        
-        .contact-text a:hover {
-            color: var(--primary);
-        }
-        
-        .contact-form {
-            flex: 1;
-            background-color: #f8fafc;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
+        /* Enhanced Contact Section Styles */
+.contact-info {
+    background-color: #f8fafc;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.contact-details {
+    margin-top: 30px;
+}
+
+.contact-item {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.contact-icon {
+    min-width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(37, 99, 235, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+.contact-text h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: var(--dark);
+}
+
+.contact-link {
+    color: var(--primary);
+    transition: color 0.3s ease;
+    display: inline-block;
+}
+
+.contact-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.contact-address {
+    color: var(--gray);
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .contact-item {
+        flex-direction: column;
+    }
+    
+    .contact-icon {
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+}
         
         .form-group {
             margin-bottom: 20px;
@@ -917,7 +917,7 @@
     <header id="header">
         <div class="container">
             <nav>
-                <a href="#home" class="logo">Subha<span>Surya</span></a>
+                <a href="#home" class="logo">S N V V S Subha <span>Surya</span><span>Kedarisetti</span></a>
                 <ul class="nav-links">
                     <li><a href="#home" class="active">Home</a></li>
                     <li><a href="#about">About</a></li>
@@ -938,7 +938,7 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1>Hi, I'm <span>Subha Surya</span></h1>
+                    <h1>Hi, I'm <span>S N V V S Subha Surya Kedarisetti</span></h1>
                     <div class="title">Data Analyst & Full Stack Developer</div>
                     <p>Detail-oriented and analytical professional with strong foundations in Python, SQL, and data visualization tools. Passionate about turning data into actionable strategies through analysis, reporting, and visualization.</p>
                     <div class="hero-btns">
@@ -1153,89 +1153,63 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Get In Touch</h2>
-                <div class="underline"></div>
-            </div>
-            
-            <div class="contact-container">
-                <div class="contact-info">
-                    <h3>Contact Information</h3>
-                    <p>Feel free to reach out to me for any questions or opportunities. I'll get back to you as soon as possible.</p>
+<section id="contact">
+    <div class="container">
+        <div class="section-title">
+            <h2>Get In Touch</h2>
+            <div class="underline"></div>
+        </div>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Contact Information</h3>
+                <p>Feel free to reach out to me for any questions or opportunities. I'll get back to you as soon as possible.</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <a href="mailto:suryaakedarisetti@gmail.com" class="contact-link">suryaakedarisetti@gmail.com</a>
+                        </div>
+                    </div>
                     
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Email</h4>
-                                <a href="mailto:suryaakedarisetti@gmail.com">suryaakedarisetti@gmail.com</a>
-                            </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
                         </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Phone</h4>
-                                <a href="tel:+919247413126">+91 9247413126</a>
-                            </div>
+                        <div class="contact-text">
+                            <h4>Phone</h4>
+                            <a href="tel:+919247413126" class="contact-link">+91 9247413126</a>
                         </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fab fa-linkedin"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>LinkedIn</h4>
-                                <a href="http://www.linkedin.com/in/surya-kedarisetti-707987227" target="_blank">linkedin.com/in/surya-kedarisetti</a>
-                            </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-linkedin"></i>
                         </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Location</h4>
-                                <p>Andhra Pradesh, India</p>
-                            </div>
+                        <div class="contact-text">
+                            <h4>LinkedIn</h4>
+                            <a href="http://www.linkedin.com/in/surya-kedarisetti-707987227" target="_blank" class="contact-link">linkedin.com/in/surya-kedarisetti</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Location</h4>
+                            <p class="contact-address">Andhra Pradesh, India</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Your Name</label>
-                            <input type="text" id="name" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Your Email</label>
-                            <input type="email" id="email" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Your Message</label>
-                            <textarea id="message" class="form-control" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">Send Message</button>
-                    </form>
-                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer>
